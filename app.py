@@ -31,7 +31,7 @@ workflow.add_node("model", call_model)
 memory = MemorySaver()
 LLMapp = workflow.compile(checkpointer=memory)
 
-config = {"configurable": {"thread_id": "abc123"}}
+
 
 app = FastAPI()
 
@@ -45,6 +45,9 @@ async def read_item(request: Request):
 
 @app.post("/query")
 async def query_model(request: Request):
+    config = {"configurable": {"thread_id": "abc123"}}
+    client_ip = request.client.host
+    config["configurable"]["thread_id"] = client_ip
     data = await request.json()
     query = data.get("query")
     input_messages = [HumanMessage(query)]
