@@ -48,6 +48,9 @@ async def query_model(request: Request):
     config = {"configurable": {"thread_id": "abc123"}}
     client_ip = request.client.host
     config["configurable"]["thread_id"] = client_ip
+    user_agent = request.headers.get("user-agent", "").lower()
+    if "mobile" in user_agent:
+        config["configurable"]["thread_id"] = f"{client_ip}_mobile"
     data = await request.json()
     query = data.get("query")
     input_messages = [HumanMessage(query)]
