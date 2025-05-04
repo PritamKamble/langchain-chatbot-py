@@ -51,3 +51,7 @@ async def query_model(request: Request):
     output = LLMapp.invoke({"messages": input_messages}, config)
     response_message = output["messages"][-1].content
     return {"response": response_message}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=3000, reload=True)
