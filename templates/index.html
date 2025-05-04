@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>ChatBot</title>
+    </head>
+    <body>
+        <h1>ChatBot</h1>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Type your message here..." required>
+            <button type="submit">Send</button>
+        </form>
+        <div id="chat-box"></div>
+
+        <script>
+            const form = document.getElementById('chat-form');
+            const userInput = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const message = userInput.value;
+                chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                userInput.value = '';
+
+                const response = await fetch('/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: message })
+                });
+
+                const data = await response.json();
+                chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+            });
+        </script>
+    </body>
+</html>
